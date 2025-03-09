@@ -154,7 +154,13 @@
         });
 
         const result = await response.json();
-        alert(result.message); // Muestra si el correo se envió correctamente o no
+
+        if (response.ok) {
+            alert(result.message); // Muestra si el correo se envió correctamente
+            window.location.href = 'https://acudeenai.bet/home'; // Redirige después de enviar
+        } else {
+            alert('Error al enviar el correo. Inténtalo de nuevo.');
+        }
     });
 </script>
 </body>
